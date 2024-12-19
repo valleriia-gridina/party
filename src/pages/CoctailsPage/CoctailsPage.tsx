@@ -6,9 +6,7 @@ const CoctailsPage = () => {
     <div className={"container"}>
       <h1>Coctail party</h1>
       <Market />
-      <Section title="My coctails">
-        <h2></h2>
-      </Section>
+      <Section title="My coctails">will be soon...</Section>
     </div>
   );
 };

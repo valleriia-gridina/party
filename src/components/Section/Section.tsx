@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+// import styles from "./Section.module.scss";
 
 type TProps = {
   children: ReactNode;
@@ -7,8 +8,14 @@ type TProps = {
 
 const Section = ({ children, title }: TProps) => {
   return (
-    <section>
-      <h2>{title}</h2>
+    <section
+    // className={styles.section}
+    >
+      <h2
+      // className={styles.title}
+      >
+        {title}
+      </h2>
       {children}
     </section>
   );

@@ -1,6 +1,10 @@
 export type TProduct = {
   name: string;
-  isAlcohol: boolean;
   amount: number;
   units: string;
+  isDrink: boolean;
+};
+
+export type TState = {
+  products: { items: TProduct[] };
 };

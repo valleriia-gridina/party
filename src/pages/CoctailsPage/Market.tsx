@@ -1,57 +1,27 @@
 import Section from "components/Section/Section";
-import AddProductForm from "./AddProductForm";
+import { useSelector } from "react-redux";
 import { useState } from "react";
-import { TProduct } from "types/types";
-import { DRINKS, INGRIDIENTS } from "constants/constants";
+import { TState } from "types/types";
+import AddProductModal from "./AddProductsModal";
 
 const Market = () => {
-  const [storageItems, setStorageItems] = useState<TProduct[]>([]);
-
-  const handleAddProduct = (product: TProduct) => {
-    if (!storageItems.length) {
-      setStorageItems([product]);
-    }
-
-    storageItems.forEach((el) => {
-      if (el.name === product.name) {
-        const updatedStorageItems = storageItems.map((el) => ({
-          ...el,
-          amount: el.amount + product.amount,
-        }));
-        setStorageItems(updatedStorageItems);
-      } else {
-        setStorageItems([...storageItems, { ...product }]);
-      }
-    });
-  };
+  const products = useSelector((state: TState) => state.products.items);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
-      <Section title="Market">
-        <AddProductForm
-          products={DRINKS}
-          defaultUnits="litre(s)"
-          onAddProduct={handleAddProduct}
-        />
-        <AddProductForm
-          products={INGRIDIENTS.map((el) => ({ name: el, alcoholic: false }))}
-          defaultUnits="litre(s)"
-          onAddProduct={handleAddProduct}
-        />
-      </Section>
       <Section title="Home storage">
-        {storageItems.length ? (
+        {products.length ? (
           <ul>
-            {storageItems.map((el) => {
+            {products.map((el) => {
               return (
                 <li key={el.name}>
                   <span>
                     {el.name}, {el.amount} {el.units}{" "}
-                    <strong>{el.isAlcohol ? "alcohol" : null}</strong>
                   </span>
                   <span>Packaged on: {new Date().toLocaleDateString()}</span>
                   <span>
-                    Best before: {el.isAlcohol ? "1 year" : "10 days"}
+                    Best use before: {el.isDrink ? "1 year" : "10 days"}
                   </span>
                 </li>
               );
@@ -60,7 +30,15 @@ const Market = () => {
         ) : (
           <p>The storage is empty</p>
         )}
+        <button onClick={() => setIsModalOpen(true)}>
+          {products.length ? "Add more products" : "Go to the market"}
+        </button>
       </Section>
+
+      <AddProductModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </>
   );
 };

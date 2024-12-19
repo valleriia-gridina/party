@@ -1,50 +1,63 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addProduct } from "redux/productsSlice";
 import { TProduct } from "types/types";
 
 type TProps = {
-  products: { name: string; alcoholic?: boolean }[];
+  defaultProducts: { name: string; isAlcoholic?: boolean }[];
   defaultUnits: string;
-  onAddProduct: (product: TProduct) => void;
+  onClose: () => void;
 };
 
-const AddProductForm = ({ products, defaultUnits, onAddProduct }: TProps) => {
-  const [productValue, setProductValue] = useState<{
-    name: string;
-    alcoholic: boolean;
-  }>({ name: "", alcoholic: false });
-  const [productAmount, setProductAmount] = useState<number>(1);
+const AddProductForm = ({ defaultProducts, defaultUnits, onClose }: TProps) => {
+  const dispatch = useDispatch();
+
+  const initialProductValue: TProduct = {
+    name: "",
+    amount: 0,
+    units: defaultUnits,
+    isDrink: true,
+  };
+
+  const [productValue, setProductValue] = useState(initialProductValue);
+  const [productAmount, setProductAmount] = useState<number>(100);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   const handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (productValue) {
-      onAddProduct({
-        name: productValue?.name,
-        isAlcohol: productValue?.alcoholic,
+    dispatch(
+      addProduct({
+        name: productValue.name,
         amount: productAmount,
-        units: defaultUnits,
-      });
-      setProductAmount(1);
-    }
+        units: productValue.units,
+        isDrink: productValue.isDrink,
+      })
+    );
+    setProductValue(initialProductValue);
+    setProductAmount(100);
+    onClose();
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <span className="formRow">
         <label>
-          <span>Select a drink</span>
+          <span>Choose a product</span>
           <select
             onChange={(e) => {
-              const product = e.target.value;
-              setProductValue(JSON.parse(product));
+              const selectedProduct = JSON.parse(e.target.value);
+              setProductValue({
+                ...selectedProduct,
+                units: selectedProduct.isDrink ? defaultUnits : "gram(s)",
+              });
               setIsDisabled(false);
             }}
             defaultValue={productValue.name}
           >
             <option value="" disabled>
-              Select a drink
+              Choose a product
             </option>
-            {products.map((el) => {
+            {defaultProducts.map((el) => {
               return (
                 <option key={el.name} value={JSON.stringify(el)}>
                   {el.name}
@@ -63,13 +76,14 @@ const AddProductForm = ({ products, defaultUnits, onAddProduct }: TProps) => {
               onChange={(e) => {
                 const amount = Number(e.target.value);
                 setProductAmount(amount);
-                setIsDisabled(amount <= 0);
+                setIsDisabled(Boolean(!productValue.name) || amount <= 0);
               }}
             />
-            {defaultUnits ? <em>{defaultUnits}</em> : null}
+            <em>{productValue.units}</em>
           </span>
         </label>
       </span>
+      <button onClick={onClose}>Cancel</button>
       <button type="submit" disabled={isDisabled}>
         Add product
       </button>
