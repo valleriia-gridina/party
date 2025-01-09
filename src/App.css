@@ -48,6 +48,19 @@ form {
       margin-right: 10px;
     }
   }
+
+  .actionBtns {
+    display: flex;
+    align-items: center;
+    padding-top: 35px;
+  }
+
+  .actionBtn {
+    border-radius: 50%;
+    padding: 5px 10px;
+    background: black;
+    color: white;
+  }
 }
 
 ul {

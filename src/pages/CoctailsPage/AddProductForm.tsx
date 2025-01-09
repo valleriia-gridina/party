@@ -12,79 +12,104 @@ type TProps = {
 const AddProductForm = ({ defaultProducts, defaultUnits, onClose }: TProps) => {
   const dispatch = useDispatch();
 
-  const initialProductValue: TProduct = {
+  const initialProductValue = {
     name: "",
     amount: 0,
     units: defaultUnits,
     isDrink: true,
   };
 
-  const [productValue, setProductValue] = useState(initialProductValue);
-  const [productAmount, setProductAmount] = useState<number>(100);
-  const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const [rows, setRows] = useState<TProduct[]>([initialProductValue]);
 
-  const handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(
-      addProduct({
-        name: productValue.name,
-        amount: productAmount,
-        units: productValue.units,
-        isDrink: productValue.isDrink,
-      })
-    );
-    setProductValue(initialProductValue);
-    setProductAmount(100);
+    rows.forEach((row) => {
+      dispatch(addProduct(row));
+    });
+    setRows([initialProductValue]);
     onClose();
+  };
+
+  const handleAddRow = () => {
+    setRows([...rows, initialProductValue]);
+  };
+
+  const handleDeleteRow = (index: number) => {
+    setRows(rows.filter((_, i) => i !== index));
+  };
+
+  const handleChangeRow = (index: number, updatedRow: Partial<TProduct>) => {
+    setRows(
+      rows.map((row, i) => (i === index ? { ...row, ...updatedRow } : row))
+    );
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <span className="formRow">
-        <label>
-          <span>Choose a product</span>
-          <select
-            onChange={(e) => {
-              const selectedProduct = JSON.parse(e.target.value);
-              setProductValue({
-                ...selectedProduct,
-                units: selectedProduct.isDrink ? defaultUnits : "gram(s)",
-              });
-              setIsDisabled(false);
-            }}
-            defaultValue={productValue.name}
-          >
-            <option value="" disabled>
-              Choose a product
-            </option>
-            {defaultProducts.map((el) => {
-              return (
+      {rows.map((row, index) => (
+        <div className="formRow" key={row.name || "product"}>
+          <label>
+            <span>Choose a product</span>
+            <select
+              onChange={(e) => {
+                const selectedProduct = JSON.parse(e.target.value);
+                handleChangeRow(index, {
+                  name: selectedProduct.name,
+                  isDrink: selectedProduct.isDrink,
+                  units: selectedProduct.isDrink ? defaultUnits : "gram(s)",
+                });
+              }}
+              defaultValue={row.name}
+            >
+              <option value="" disabled>
+                Choose a product
+              </option>
+              {defaultProducts.map((el) => (
                 <option key={el.name} value={JSON.stringify(el)}>
                   {el.name}
                 </option>
-              );
-            })}
-          </select>
-        </label>
-        <label>
-          <span>Add amount</span>
-          <span className="formRow">
-            <input
-              type="number"
-              placeholder="Type a number"
-              value={productAmount}
-              onChange={(e) => {
-                const amount = Number(e.target.value);
-                setProductAmount(amount);
-                setIsDisabled(Boolean(!productValue.name) || amount <= 0);
-              }}
-            />
-            <em>{productValue.units}</em>
-          </span>
-        </label>
-      </span>
-      <button onClick={onClose}>Cancel</button>
-      <button type="submit" disabled={isDisabled}>
+              ))}
+            </select>
+          </label>
+          <label>
+            <span>Add amount</span>
+            <span className="formRow">
+              <input
+                type="number"
+                placeholder="Type a number"
+                value={row.amount}
+                onChange={(e) => {
+                  const amount = Number(e.target.value);
+                  handleChangeRow(index, { amount });
+                }}
+              />
+              <em>{row.units}</em>
+            </span>
+          </label>
+          <div className="actionBtns">
+            <button type="button" className="actionBtn" onClick={handleAddRow}>
+              +
+            </button>
+            {rows.length > 1 && (
+              <button
+                type="button"
+                className="actionBtn"
+                onClick={() => handleDeleteRow(index)}
+              >
+                x
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
+
+      <button type="button" onClick={onClose}>
+        Cancel
+      </button>
+      <button
+        type="submit"
+        disabled={rows.some((row) => !row.name || row.amount <= 0)}
+      >
         Add product
       </button>
     </form>
