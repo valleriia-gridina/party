@@ -14,7 +14,7 @@ const AddProductForm = ({ defaultProducts, defaultUnits, onClose }: TProps) => {
 
   const initialProductValue = {
     name: "",
-    amount: 0,
+    amount: 100,
     units: defaultUnits,
     isDrink: true,
   };
@@ -47,7 +47,7 @@ const AddProductForm = ({ defaultProducts, defaultUnits, onClose }: TProps) => {
   return (
     <form onSubmit={handleSubmit}>
       {rows.map((row, index) => (
-        <div className="formRow" key={row.name || "product"}>
+        <div className="formRow" key={index}>
           <label>
             <span>Choose a product</span>
             <select
