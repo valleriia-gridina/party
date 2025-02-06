@@ -1,0 +1,13 @@
+.cocktailsWrapper {
+  display: flex;
+  flex-basis: 100%;
+  flex: 1;
+  min-width: 100%;
+}
+.cocktails {
+  flex-basis: 80%;
+  padding-left: 30px;
+}
+.ingredients {
+  width: 20%;
+}
