@@ -14,6 +14,9 @@ const Market = () => {
         {products.length ? (
           <ul>
             {products.map((el) => {
+              if (el.amount === 0) {
+                return;
+              }
               return (
                 <li key={el.name}>
                   <span>

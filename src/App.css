@@ -4,6 +4,23 @@
   padding: 2rem;
 }
 
+.container {
+  display: flex;
+  flex-wrap: wrap;
+
+  > h1 {
+    width: 100%;
+  }
+
+  > section {
+    margin-right: 100px;
+
+    > ul {
+      padding-left: 15px;
+    }
+  }
+}
+
 form {
   label {
     span {
@@ -70,5 +87,11 @@ ul {
 
   span {
     display: block;
+  }
+}
+
+.coctails {
+  button {
+    margin-left: 15px;
   }
 }

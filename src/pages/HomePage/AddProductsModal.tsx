@@ -1,6 +1,6 @@
 import Section from "components/Section/Section";
 import AddProductForm from "./AddProductForm";
-import { DRINKS, INGRIDIENTS } from "constants/constants";
+import { DRINKS, OTHER_INGREDIENTS } from "constants/constants";
 
 type TProps = {
   isOpen: boolean;
@@ -15,7 +15,7 @@ const AddProductModal = ({ isOpen, onClose }: TProps) => {
     isDrink: true,
   }));
 
-  const otherProducts = INGRIDIENTS.map((el) => ({
+  const otherProducts = OTHER_INGREDIENTS.map((el) => ({
     name: el,
     isDrink: false,
   }));
@@ -26,7 +26,6 @@ const AddProductModal = ({ isOpen, onClose }: TProps) => {
         <Section title="Market">
           <AddProductForm
             defaultProducts={[...drinks, ...otherProducts]}
-            defaultUnits="milliliter(s)"
             onClose={onClose}
           />
         </Section>

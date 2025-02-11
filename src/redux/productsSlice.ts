@@ -21,8 +21,19 @@ const productsSlice = createSlice({
         state.items.push(action.payload);
       }
     },
+    makeCoctail: (state, action: PayloadAction<TProduct[]>) => {
+      const ingredients = action.payload;
+
+      ingredients.forEach((i) => {
+        state.items.forEach((el) => {
+          if (el.name === i.name) {
+            el.amount = el.amount - i.amount;
+          }
+        });
+      });
+    },
   },
 });
 
-export const { addProduct } = productsSlice.actions;
+export const { addProduct, makeCoctail } = productsSlice.actions;
 export default productsSlice.reducer;

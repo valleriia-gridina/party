@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import CoctailsPage from "pages/CoctailsPage/CoctailsPage";
+import HomePage from "pages/HomePage/HomePage";
 import ErrorPage from "pages/ErrorPage/ErrorPage";
 
 import "./App.css";
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <CoctailsPage />,
+    element: <HomePage />,
   },
 ]);
 

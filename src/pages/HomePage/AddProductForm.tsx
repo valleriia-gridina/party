@@ -1,21 +1,20 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addProduct } from "redux/productsSlice";
-import { TProduct } from "types/types";
+import { TProduct, UnitType } from "types/types";
 
 type TProps = {
   defaultProducts: { name: string; isAlcoholic?: boolean }[];
-  defaultUnits: string;
   onClose: () => void;
 };
 
-const AddProductForm = ({ defaultProducts, defaultUnits, onClose }: TProps) => {
+const AddProductForm = ({ defaultProducts, onClose }: TProps) => {
   const dispatch = useDispatch();
 
   const initialProductValue = {
     name: "",
     amount: 100,
-    units: defaultUnits,
+    units: UnitType.ml,
     isDrink: true,
   };
 
@@ -56,7 +55,7 @@ const AddProductForm = ({ defaultProducts, defaultUnits, onClose }: TProps) => {
                 handleChangeRow(index, {
                   name: selectedProduct.name,
                   isDrink: selectedProduct.isDrink,
-                  units: selectedProduct.isDrink ? defaultUnits : "gram(s)",
+                  units: selectedProduct.isDrink ? UnitType.ml : UnitType.g,
                 });
               }}
               defaultValue={row.name}
