@@ -2,7 +2,7 @@ import Section from "components/Section/Section";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { TState } from "types/types";
-import AddProductModal from "./AddProductsModal";
+import AddProductsModal from "./AddProductsModal";
 
 const Market = () => {
   const products = useSelector((state: TState) => state.products.items);
@@ -13,19 +13,17 @@ const Market = () => {
       <Section title="Home storage">
         {products.length ? (
           <ul>
-            {products.map((el) => {
-              if (el.amount === 0) {
+            {products.map(({ name, amount, units, isDrink }) => {
+              if (amount === 0) {
                 return;
               }
               return (
-                <li key={el.name}>
+                <li key={name}>
                   <span>
-                    {el.name}, {el.amount} {el.units}{" "}
+                    {name}, {amount} {units}{" "}
                   </span>
                   <span>Packaged on: {new Date().toLocaleDateString()}</span>
-                  <span>
-                    Best use before: {el.isDrink ? "1 year" : "10 days"}
-                  </span>
+                  <span>Best use before: {isDrink ? "1 year" : "10 days"}</span>
                 </li>
               );
             })}
@@ -38,7 +36,7 @@ const Market = () => {
         </button>
       </Section>
 
-      <AddProductModal
+      <AddProductsModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />

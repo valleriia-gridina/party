@@ -1,5 +1,5 @@
-import Market from "./Market";
-import Coctails from "./Coctails";
+import Market from "./components/Market";
+import Coctails from "./components/Coctails";
 
 const HomePage = () => {
   return (

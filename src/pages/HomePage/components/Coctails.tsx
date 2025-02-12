@@ -31,7 +31,7 @@ const Coctails = () => {
       <ul className="coctails">
         {COCTAILS.map(({ name, ingredients }) => {
           const isCoctailDisabled = !possibleCoctails.find(
-            (c) => name === c.name
+            (coctail) => name === coctail.name
           );
           return (
             <li key={name}>

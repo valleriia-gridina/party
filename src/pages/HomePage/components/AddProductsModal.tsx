@@ -7,7 +7,7 @@ type TProps = {
   onClose: () => void;
 };
 
-const AddProductModal = ({ isOpen, onClose }: TProps) => {
+const AddProductsModal = ({ isOpen, onClose }: TProps) => {
   if (!isOpen) return;
 
   const drinks = DRINKS.map((el) => ({
@@ -15,7 +15,7 @@ const AddProductModal = ({ isOpen, onClose }: TProps) => {
     isDrink: true,
   }));
 
-  const otherProducts = OTHER_INGREDIENTS.map((el) => ({
+  const otherIngredients = OTHER_INGREDIENTS.map((el) => ({
     name: el,
     isDrink: false,
   }));
@@ -25,7 +25,7 @@ const AddProductModal = ({ isOpen, onClose }: TProps) => {
       <div className="modal">
         <Section title="Market">
           <AddProductForm
-            defaultProducts={[...drinks, ...otherProducts]}
+            defaultProducts={[...drinks, ...otherIngredients]}
             onClose={onClose}
           />
         </Section>
@@ -34,4 +34,4 @@ const AddProductModal = ({ isOpen, onClose }: TProps) => {
   );
 };
 
-export default AddProductModal;
+export default AddProductsModal;
